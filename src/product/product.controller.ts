@@ -13,30 +13,13 @@ export class ProductController {
   ) {}  
 
   @ApiOkResponse({type: Product})
-  @Post()
-  async create(@Body() dto: ProductInput): Promise<ProductInput> {
-    return this.service.create(dto);
-  }
-
-  @ApiOkResponse({type: Product})
-  @ApiParam({name: 'id', type: 'number'})
-  @Get(':id')
-  async retrieve(@Param('id') id: bigint): Promise<ProductInput> {
-    return await this.service.retrieve(id);
-  }
-
-  @ApiOkResponse({type: Product})
-  @ApiParam({name: 'id', type: 'number'})
-  @Put(':id')
-  async update(@Param('id') id: bigint, @Body() dto: ProductInput): Promise<ProductInput> {
-    return await this.service.update(id, dto);
-  }
-
-  @ApiParam({name: 'id', type: 'number'})
-  @Delete(':id')
-  async delete(@Param('id') id: bigint, @Res() res: Response) {
-    await this.service.delete(id);
-    res.status(HttpStatus.OK).json({"message": "success"});
+  @Get()
+  async list(): Promise<any> {
+    const [products, count] = await this.service.list();
+    return {
+      datas: products,
+      total: count
+    }
   }
 
 }

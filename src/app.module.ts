@@ -5,13 +5,10 @@ import { AppService } from './app.service';
 import { ProductModule } from './product/product.module';
 import { AutomapperModule } from "@automapper/nestjs";
 import { classes } from '@automapper/classes';
-import { GiftCardModule } from './gift_card/gift_card.module';
 import { CollectionModule } from './collection/collection.module';
 import { CartModule } from './cart/cart.module';
 import { CustomerModule } from './customer/customer.module';
 import { CustomerGroupModule } from './customer_group/customer_group.module';
-import { DiscountModule } from './discount/discount.module';
-import { DiscountConditionModule } from './discount_condition/discount_condition.module';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { SystemExceptionFilter } from './app.filter'
@@ -40,12 +37,9 @@ const DatabaseModule = TypeOrmModule.forRoot({
     AutomapperModule.forRoot({
       strategyInitializer: classes(),
     }),
-    GiftCardModule,
     CollectionModule,
     CustomerModule,
     CustomerGroupModule,
-    DiscountModule,
-    DiscountConditionModule,
     UserModule,
     AuthModule,
     CartModule,

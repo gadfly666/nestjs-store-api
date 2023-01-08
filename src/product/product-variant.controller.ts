@@ -5,7 +5,7 @@ import { ProductOptionInput, ProductVariantInput } from './product.input';
 import { ProductService } from './product.service';
 import { Product, ProductVariant } from './product.entity';
 
-@ApiTags('Product Options')
+@ApiTags('Product Variants')
 @Controller('product')
 export class ProductVariantController{
   constructor( 
@@ -17,24 +17,28 @@ export class ProductVariantController{
     name: "id",
     type: "number"
   })
-  @Post(':id/variants')
-  async createVariant(@Param('id') id: bigint, @Body() input: ProductVariantInput) {
-    return this.service.createVariant(id, input);
+  @Get(':id/variants')
+  async createVariant(@Param('id') id: bigint) {
+    const [variants, count] = await this.service.listVariants(id);
+    return {
+      data: variants,
+      total: count
+    }
   }
 
-  @ApiOkResponse({type: ProductVariant})
-  @ApiParam({name: "id", type: "number"})
-  @ApiParam({name: "varant_id", type: "number"})
-  @Put(':id/variants/:variant_id')
-  async updateVariant(@Param('id') id: bigint, @Param('variant_id') variantId: bigint, @Body() input: ProductVariantInput) {
-    return this.service.updateVariant(id, variantId, input);
-  }
+  // @ApiOkResponse({type: ProductVariant})
+  // @ApiParam({name: "id", type: "number"})
+  // @ApiParam({name: "varant_id", type: "number"})
+  // @Put(':id/variants/:variant_id')
+  // async updateVariant(@Param('id') id: bigint, @Param('variant_id') variantId: bigint, @Body() input: ProductVariantInput) {
+  //   return this.service.updateVariant(id, variantId, input);
+  // }
 
-  @ApiParam({name: "id", type: "number"})
-  @ApiParam({name: "variant_id", type: "number"})
-  @Put(':id/variants/:variant_id')
-  async deleteVariant(@Param('id') id: bigint, @Param('variant_id') variantId: bigint) {
-    return this.service.deleteVariant(id, variantId);
-  }
+  // @ApiParam({name: "id", type: "number"})
+  // @ApiParam({name: "variant_id", type: "number"})
+  // @Put(':id/variants/:variant_id')
+  // async deleteVariant(@Param('id') id: bigint, @Param('variant_id') variantId: bigint) {
+  //   return this.service.deleteVariant(id, variantId);
+  // }
 
 }
