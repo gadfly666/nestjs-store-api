@@ -34,7 +34,7 @@ export class UserService {
         user = this.mapper.map(dto, RegisterDto, User);
         this.logger.log(`Mapped user ${JSON.stringify(user)}`);
         // TODO rethink about anonymous and customer role
-        user.role = UserRole.ANONYMOUS
+        user.role = UserRole.CUSTOMER
 
         const salt = await bcrypt.genSalt();
         user.passwordHash = await bcrypt.hash(dto.password, salt);
