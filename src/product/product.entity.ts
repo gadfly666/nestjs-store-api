@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn, ManyToOne, OneToMany, Relation} from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn, ManyToOne, OneToMany, Relation, PrimaryColumn } from "typeorm";
 import { AbstractEntity } from "../app.entity";
 
 // TODO archive table instead of status
@@ -23,6 +23,8 @@ export class ProductOption extends AbstractEntity {
   title: string;
   @Column({name: "metadata", nullable: true, type: "jsonb"})
   metadata: Record<string, any>;
+  @OneToMany(() => ProductOptionValue, (value) => value.option, {lazy: true})
+  values: ProductOptionValue[];
 }
 
 @Entity({name: "product_types"})
@@ -131,6 +133,24 @@ export class ProductVariant extends AbstractEntity {
   // TODO add metadata
   @Column({name: "deleted_at", nullable: true})
   deletedAt: Date;
+  @OneToMany(() => ProductOptionValue, (value) => value.variant, {lazy: true})
+  optionValues: ProductOptionValue[];
+}
+
+@Entity({name: "product_option_to_variant"})
+export class ProductOptionValue extends AbstractEntity {
+  @PrimaryColumn({name: "option_id", type: "bigint"})
+  optionId: bigint;
+  @PrimaryColumn({name: "variant_id", type: "bigint"})
+  variantId: bigint;
+  @Column({name: "value"})
+  value: string;
+  @ManyToOne(() => ProductOption)
+  @JoinColumn({ name: "option_id", referencedColumnName: "id"})
+  option: ProductOption;
+  @ManyToOne(() => ProductVariant)
+  @JoinColumn({ name: "variant_id", referencedColumnName: "id"})
+  variant: ProductVariant;
 }
 
 // @Entity({name: "money_amounts"})
