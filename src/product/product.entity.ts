@@ -99,8 +99,9 @@ export class ProductVariant extends AbstractEntity {
   @ManyToOne(() => Product, {lazy: true})
   @JoinColumn({name: "product_id"})
   product: Product;
-  @OneToMany(() => MoneyAmount, (price) => price.variant, {lazy: true})
-  prices: MoneyAmount[];
+  @Column({name: "price", type: 'bigint'})
+  // @OneToMany(() => MoneyAmount, (price) => price.variant, {lazy: true})
+  price: bigint;
   @Column({name: "sku", nullable: true})
   sku: string;
   @Column({name: "barcode", nullable: true})
@@ -132,17 +133,17 @@ export class ProductVariant extends AbstractEntity {
   deletedAt: Date;
 }
 
-@Entity({name: "money_amounts"})
-export class MoneyAmount extends AbstractEntity {
-  @PrimaryGeneratedColumn({name: "id", type: "bigint"})
-  id: bigint;
-  @Column({name: "amount", type: "bigint", nullable: true})
-  amount: bigint;
-  @Column({name: "variant_id", type: "bigint"})
-  variantId: bigint;
-  @ManyToOne(() => ProductVariant, (variant) => variant.prices, {
-    onDelete: "CASCADE",
-  })
-  @JoinColumn({ name: "variant_id" })
-  variant: Relation<ProductVariant>;
-}
+// @Entity({name: "money_amounts"})
+// export class MoneyAmount extends AbstractEntity {
+//   @PrimaryGeneratedColumn({name: "id", type: "bigint"})
+//   id: bigint;
+//   @Column({name: "amount", type: "bigint", nullable: true})
+//   amount: bigint;
+//   @Column({name: "variant_id", type: "bigint"})
+//   variantId: bigint;
+//   @ManyToOne(() => ProductVariant, (variant) => variant.prices, {
+//     onDelete: "CASCADE",
+//   })
+//   @JoinColumn({ name: "variant_id" })
+//   variant: Relation<ProductVariant>;
+// }

@@ -7,6 +7,7 @@ import { AutomapperModule } from "@automapper/nestjs";
 import { classes } from '@automapper/classes';
 import { GiftCardModule } from './gift_card/gift_card.module';
 import { CollectionModule } from './collection/collection.module';
+import { CartModule } from './cart/cart.module';
 import { CustomerModule } from './customer/customer.module';
 import { CustomerGroupModule } from './customer_group/customer_group.module';
 import { DiscountModule } from './discount/discount.module';
@@ -17,6 +18,8 @@ import { SystemExceptionFilter } from './app.filter'
 import { WinstonModule } from 'nest-winston';
 import { transports, format } from 'winston';
 import { RequestLogMiddleware } from './app.middleware';
+import { APP_GUARD } from '@nestjs/core';
+import { JwtAuthGuard } from './auth/auth.guard';
 
 const DatabaseModule = TypeOrmModule.forRoot({
   type: 'postgres',
@@ -45,6 +48,7 @@ const DatabaseModule = TypeOrmModule.forRoot({
     DiscountConditionModule,
     UserModule,
     AuthModule,
+    CartModule,
     // WinstonModule.forRoot({
     //   level: process.env.LOG_LEVEL || 'info',
     //   format: process.env.NODE_ENV !== 'production' ? format.simple() : format.json(),
@@ -54,7 +58,12 @@ const DatabaseModule = TypeOrmModule.forRoot({
     // }),
   ],
   controllers: [AppController],
-  providers: [AppService, SystemExceptionFilter, Logger],
+  providers: [AppService, SystemExceptionFilter, Logger,
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    }, 
+  ],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

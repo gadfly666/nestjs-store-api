@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Not,Repository } from 'typeorm';
-import { Product, ProductStatus, ProductType, ProductOption, ProductVariant, MoneyAmount } from './product.entity';
+import { Product, ProductStatus, ProductType, ProductOption, ProductVariant} from './product.entity';
 import { ProductInput, ProductOptionInput, ProductVariantInput } from './product.input';
 import { privateDecrypt } from 'crypto';
 import { resourceLimits } from 'worker_threads';
@@ -20,8 +20,6 @@ export class ProductService {
     private productOptionRepository: Repository<ProductOption>,
     @InjectRepository(ProductVariant)
     private productVariantRepository: Repository<ProductVariant>,
-    @InjectRepository(MoneyAmount)
-    private moneyAmountRepository: Repository<MoneyAmount>,
   ) {}
 
   async create(input: ProductInput): Promise<Product> {
@@ -213,7 +211,7 @@ export class ProductService {
       });
     }
 
-    const {prices, ...rest} = input;
+    const {...rest} = input;
 
     if (!rest.variantRank) {
       rest.variantRank = BigInt(product.variants.length);
@@ -221,13 +219,6 @@ export class ProductService {
 
     let variant = this.productVariantRepository.create({...rest, productId: product.id})
     variant = await this.productVariantRepository.save(variant);
-
-    if (prices) {
-      for (let price of prices) {
-        price = this.moneyAmountRepository.create({...price, variantId: variant.id})
-        await this.moneyAmountRepository.save(price)
-      }
-    }
 
     return variant;
   }
@@ -237,8 +228,7 @@ export class ProductService {
       where: {
         "id": variantId,
         "productId": productId  
-      },
-      relations: ["prices"]
+      }
     });
 
     if (!variant) {
@@ -247,14 +237,13 @@ export class ProductService {
       });
     }
 
-    const {prices, ...rest} = input;
+    const {...rest} = input;
 
 
     for (const [key, value] of Object.entries(rest)) {
       variant[key] = value
     }
 
-    // TODO update variant prices
     variant = await this.productVariantRepository.save(variant);
     return variant;
   }
@@ -264,8 +253,7 @@ export class ProductService {
       where: {
         "id": variantId,
         "productId": productId
-      },
-      relations: ["prices"]
+      }
     });
 
     if (variant) {

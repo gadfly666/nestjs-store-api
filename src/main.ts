@@ -10,7 +10,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     logger: ['error', 'warn', 'log', 'verbose', 'debug']
   });
-  const contextPath = '/admin/api'
+  const contextPath = '/store/api'
 
   app.useGlobalFilters(
     app.get(SystemExceptionFilter)
@@ -20,7 +20,7 @@ async function bootstrap() {
 
   // app.useLogger(app.get(WINSTON_MODULE_NEST_PROVIDER))
   const config = new DocumentBuilder()
-    .setTitle('Shooping Admin API')
+    .setTitle('Shooping Store API')
     .setDescription('')
     .setVersion('1.0')
     .addBearerAuth()

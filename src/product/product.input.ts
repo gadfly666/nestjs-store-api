@@ -86,6 +86,6 @@ export class ProductVariantInput {
   lengh: bigint;
   @ApiProperty()
   width: bigint;
-  @ApiProperty({type: [MoneyAmountInput]})
-  prices: MoneyAmountInput[];
+  @ApiProperty()
+  price: bigint;
 }

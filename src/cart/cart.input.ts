@@ -3,10 +3,10 @@ import { ApiProperty } from "@nestjs/swagger";
 import { IsInt, IsNotEmpty, IsString } from "class-validator";
 
 
-export class Item {
+export class ItemInput {
   @IsNotEmpty()
   @IsString()
-  variant_id: string
+  variant_id: bigint 
 
   @IsNotEmpty()
   @IsInt()
@@ -15,5 +15,5 @@ export class Item {
 
 export class CartInput{
   @ApiProperty()
-  items: Item[];
+  items: ItemInput[];
 }

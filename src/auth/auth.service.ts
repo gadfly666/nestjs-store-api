@@ -1,4 +1,4 @@
-import { Injectable, Inject, NotFoundException, ConflictException } from '@nestjs/common';
+import { Injectable, Inject, NotFoundException, ConflictException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User, UserLoginSession } from '../user/user.entity';
@@ -41,7 +41,7 @@ export class AuthService {
     })
 
     if (!session) {
-      return null;
+      throw new UnauthorizedException();
     }
 
     return await this.userRepository.findOne({

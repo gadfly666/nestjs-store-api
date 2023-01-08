@@ -6,7 +6,7 @@ import { AbstractEntity } from "../app.entity";
 export class LineItem extends AbstractEntity {
   @PrimaryGeneratedColumn({name: "id",type: "bigint"})
   id: bigint;
-  @Column({name: "cart_id"})
+  @Column({name: "cart_id", type: "bigint"})
   cartId: bigint;
   @ManyToOne(() => Cart, {lazy: true})
   @JoinColumn({name: "cart_id", referencedColumnName: "id"})
@@ -17,9 +17,9 @@ export class LineItem extends AbstractEntity {
   description: string;
   @Column({name: "thumbnail"})
   thumbnail: string;
-  @Column({name: "unit_price"})
-  unitPrice: number;
-  @Column({name: "variant_id"})
+  @Column({name: "unit_price", type: "bigint"})
+  unitPrice: bigint;
+  @Column({name: "variant_id", type: "bigint"})
   variantId: bigint; 
   @Column({name: "quantity"})
   quantity: number;
@@ -37,9 +37,9 @@ export enum CartType {
 export class Cart extends AbstractEntity {
   @PrimaryGeneratedColumn({name: "id",type: "bigint"})
   id: bigint;
-  @Column({name: "email"})
+  @Column({name: "email", nullable: true})
   email: string;
-  @Column({name: "shipping_address_id", nullable: true})
+  @Column({name: "shipping_address_id", nullable: true, type: "bigint"})
   shippingAdrressId: bigint;
   @Column({name: "type", type: "enum", enum: CartType, default: CartType.DEFAULT})
   type: CartType;
